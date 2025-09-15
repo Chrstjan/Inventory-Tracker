@@ -16,7 +16,6 @@ namespace Inventory_Tracker
 
             var menu = new NavigationMenu();
             menu.MainMenu();
-
         }
     }
 }

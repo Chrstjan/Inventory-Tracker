@@ -7,7 +7,7 @@
         {
             while (showMenu)
             {
-                
+                Console.Clear();
 
                 Console.Write("Inventory Tracker 1.0\n" +
                               "---------------------\n");

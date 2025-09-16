@@ -1,9 +1,11 @@
-﻿namespace Inventory_Tracker.UI
+﻿using Inventory_Tracker.Services;
+
+namespace Inventory_Tracker.UI
 {
     internal class NavigationMenu
     {
          private bool showMenu = true;
-        internal void MainMenu()
+        internal async void MainMenu()
         {
             while (showMenu)
             {
@@ -24,8 +26,8 @@
                 {
 
                     case 2:
-                        Console.WriteLine("Show inventory");
-                        Console.ReadKey();
+                        await ProductService.GetProducts();
+                        showMenu = false;
                         break;
                     case 5:
                         Exit();

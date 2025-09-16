@@ -10,7 +10,6 @@ namespace Inventory_Tracker
             using (var context = new AppDbContext())
             {
                 context.Database.EnsureCreated();
-
                 Console.WriteLine("DB created or already exists!");
             }
 

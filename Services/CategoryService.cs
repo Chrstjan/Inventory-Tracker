@@ -22,13 +22,21 @@ namespace Inventory_Tracker.Services
             }
         }
 
-        internal static void CreateCategory(string title)
+        internal static async Task CreateCategory(string title)
         {
-            using (var context = new AppDbContext())
+            var context = new AppDbContext();
+
+            var alreadyExists = await context.Categories.AnyAsync(c => c.Title.ToLower() == title.ToLower());
+
+            if (alreadyExists)
             {
-                context.Categories.Add(new Category { Title = title });
-                context.SaveChanges();
+                Console.WriteLine($"Category with title: {title} already exists");
+                return;
             }
+            
+            context.Categories.Add(new Category { Title = title });
+            await context.SaveChangesAsync();
+            
         }
     }
 }

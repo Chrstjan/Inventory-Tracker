@@ -13,7 +13,7 @@ namespace Inventory_Tracker.Services
 
             using (var context = new AppDbContext())
             {
-                var products = await context.Products.ToListAsync();
+                var products = await context.Products.Include(p => p.Category).ToListAsync();
 
                 var productMenu = new ProductMenu();
                 productMenu.ProductsList(products);
@@ -22,11 +22,11 @@ namespace Inventory_Tracker.Services
             }
         }
 
-        internal static void GetProductById(int productId)
+        internal static async void GetProductById(int productId)
         {
             using var context = new AppDbContext();
 
-            var product = context.Products.Find(productId);
+            var product = await context.Products.Include(p => p.Category).SingleAsync(p => p.Id == productId);
 
             if (product == null)
             {

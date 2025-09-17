@@ -1,10 +1,23 @@
 ﻿using Inventory_Tracker.Services;
+using Inventory_Tracker.Helper;
 
 namespace Inventory_Tracker.UI
 {
     internal class NavigationMenu
     {
          private bool showMenu = true;
+         private List<MenuItem> menuItems;
+
+        public NavigationMenu()
+        {
+            menuItems = new List<MenuItem>
+            {
+                new MenuItem("Handle inventory", () => { var invMenu = new InventoryMenu(); invMenu.InventoryList(); showMenu = false; }),
+                new MenuItem("Show inventory", async () => { await ProductService.GetProducts(); showMenu = false; }),
+                new MenuItem("Exit", () => Exit())
+            };
+        }
+
         internal async void MainMenu()
         {
             while (showMenu)
@@ -13,30 +26,22 @@ namespace Inventory_Tracker.UI
 
                 Console.Write("Inventory Tracker 1.0\n" +
                               "---------------------\n");
-                Console.WriteLine("1: Handle inventory");
-                Console.WriteLine("2: Show inventory");
-                Console.WriteLine("3: Show orders");
-                Console.WriteLine("4: Show customers");
-                Console.WriteLine("5: Exit");
+                for (int i = 0; i < menuItems.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}: {menuItems[i].Text}");
+                }
                 Console.WriteLine("---------------------");
 
-                int input = Convert.ToInt32(Console.ReadLine());
-
-                switch (input)
+                if (int.TryParse(Console.ReadLine(), out int input) &&
+                    input >= 1 && input <= menuItems.Count)
                 {
-
-                    case 2:
-                        await ProductService.GetProducts();
-                        showMenu = false;
-                        break;
-                    case 5:
-                        Exit();
-                        break;
-                    default:
-                        Console.WriteLine("Invalid input. Press any key to continue...");
-                        Console.ReadKey();
-                        break;
-                };
+                    await menuItems[input - 1].Action();
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Press any key to continue...");
+                    Console.ReadKey();
+                }
             }
         }
 
